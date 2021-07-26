@@ -1,0 +1,55 @@
+<div class="app-casino__maincontainer">
+        <!-- FILTERS -->
+        <div class="search-provider">
+                <input type="text" #myInputSerach placeholder="Enter game name">
+                <select #myDropDownSearch>
+                        <option value="allProvider">Show all providers</option>
+                        <option [value]="item.providerName" *ngFor="let item of dropDownSearch">
+                                {{item.providerName}}
+                        </option>
+                </select>
+        </div>
+
+        <!-- LIST OF GAMES -->
+        <div class="app-casino__content">
+                <div *ngFor="let item of inputSerach">
+                        <div class="app-casino__json-data-container">
+                                <img class="app-casino__img" height="280" width="280" [src]="item.thumb.url"
+                                        alt="{{item.title}}" *ngIf="item.thumb!==null">
+                                <div *ngIf="item.thumb===null">
+                                        <img class="app-casino__img" height="280" width="280"
+                                                src="assets/images/no-image.png" alt="{{item.title}}">
+                                </div>
+                        </div>
+                        <div class="app-casino__btn-title">
+                                <span class="app-casino__title">{{item.title}}</span>
+                                <a class="app-casino__btn" [href]="item.startUrl" (click)="getLastPlayed(item)"
+                                        target="_blank">
+                                        Play for Fun
+                                </a>
+                        </div>
+                </div>
+
+                <!-- ALERT MESSAGE -->
+                <div *ngIf="alertMsg">
+                        <h1 class="app-casino__alertMsg">No {{gameNameNotAval}} game available yet ☹</h1>
+                </div>
+        </div>
+
+        <h2>Last Played</h2>
+        <div class="app-casino__content">
+                <div *ngFor="let item of lastPlayed | slice:0:5">
+                        <div class="app-casino__json-data-container">
+                                <img class="app-casino__img" height="280" width="280" [src]="item.thumb.url"
+                                        alt="{{item.title}}" *ngIf="item.thumb!==null">
+                                <div *ngIf="item.thumb===null">
+                                        <img class="app-casino__img" height="280" width="280"
+                                                src="assets/images/no-image.png" alt="{{item.title}}">
+                                </div>
+                        </div>
+                        <div class="app-casino__btn-title">
+                                <span class="app-casino__title">{{item.title}}</span>
+                        </div>
+                </div>
+        </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="app-topbar__container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-justify"
+                viewBox="0 0 16 16" (click)="expandSidebar()">
+                <path fill-rule="evenodd"
+                        d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+        </svg>
+        <a class="app-topbar__brand">Casino</a>
+
+</div>
+
+<!-- sidebar -->
+<div class="app-sidebar__container" *ngIf="expand">
+        <ul class="app-sidebar__list">
+                <li class="app-sidebar__list-item" *ngFor="let item of navItems">
+                        <a class="app-sidebar__link" routerLinkActive="app-sidebar__active" routerLink='{{item.route}}'>
+                                <span class="app-sidebar__title">{{item.displayName}}</span>
+                        </a>
+                </li>
+        </ul>
+</div>

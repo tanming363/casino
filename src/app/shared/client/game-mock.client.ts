@@ -10,10 +10,7 @@ export class GameMockClient {
 
 	private readonly dataURL = "assets/game.mock-data.json";
 
-	constructor(
-		private http: HttpClient
-	) {
-	}
+	constructor(private http: HttpClient) { }
 
 	getAll$(): Observable<Game[]> {
 		return this.http.get<Game[]>(this.dataURL);

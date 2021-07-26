@@ -1,1 +1,99 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@app/colors";
+@import "@app/mixins";
+@import "@app/fonts";
+body {
+	font-family: $font-family-sans-serif;
+	background: linear-gradient(to left, $purple, $red);
+}
+.app-casino {
+	&__maincontainer {
+		margin: 70px 50px;
+	}
+	&__content {
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+		padding: 0;
+		margin: 0;
+		@include breakpoint("small") {
+			justify-content: center;
+		}
+	}
+	&__json-data-container {
+		transition: all 0.3s;
+		text-align: center;
+	}
+	&__img {
+		border-radius: 10px;
+		border: 6px solid $gold;
+	}
+	&__json-data-container:hover {
+		transition: all 0.3s;
+		transform: scale(1.05);
+	}
+	&__btn-title {
+		text-align: center;
+		text-align: center;
+		margin-bottom: 18px;
+	}
+	&__btn {
+		background-color: $gold;
+		border-radius: 10px;
+		cursor: pointer;
+		border: none;
+		text-decoration: none;
+		line-height: 22px;
+		padding: 4px 6px;
+		border-radius: 2px;
+		color: $black;
+		height: 20px;
+		font-size: 12px;
+		font-weight: 600;
+	}
+	&__title {
+		display: block;
+		text-align: center;
+		margin: 5px 0;
+		font-weight: 600;
+		color: $white;
+		word-spacing: 0.9px;
+	}
+	&__alertMsg {
+		color: $gold;
+	}
+}
+input[type="text"],
+select {
+	width: 100%;
+	padding: 12px 20px;
+	font-size: 18px;
+	margin: 8px 0;
+	display: inline-block;
+	border: none;
+	border-radius: 4px;
+	margin-bottom: 25px;
+	box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%),
+		0 1px 18px 0 rgb(0 0 0 / 12%);
+	@include breakpoint("small") {
+		margin: 5px;
+	}
+}
+input[type="text"],
+select:focus {
+	outline: none;
+}
+.search-provider {
+	display: grid;
+	grid-template-columns: 65% 30%;
+	column-gap: 5%;
+	@include breakpoint("small") {
+		justify-content: center;
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
+h2 {
+	color: $white;
+	letter-spacing: 0.8px;
+}
