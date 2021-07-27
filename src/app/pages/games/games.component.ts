@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { Observable, fromEvent } from "rxjs";
 import { GameMockClient, Game } from "../../shared";
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,24 +12,27 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GamesComponent implements OnInit, AfterViewInit {
   gamesData$!: Observable<Game[]>;
-  inputSerach: any = [];
-  dropDownSearch: any = [];
+  inputSerach: Game[] = [];
+  dropDownSearch: any[] = [];
   alertMsg: boolean = false;
   gameNameNotAval: any;
-  lastPlayed: any = []
+  lastPlayed: Game[] = []
   itemId: any = [];
 
   @ViewChild("myInputSerach", { static: true }) myInputSerach!: ElementRef;
   @ViewChild("myDropDownSearch", { static: true }) myDropDownSearch!: ElementRef;
 
-  constructor(private gameMockClient: GameMockClient, private route: ActivatedRoute) { }
+  constructor(
+    private gameMockClient: GameMockClient,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.gamesData$ = this.gameMockClient.getAll$();
     this.gamesData$.subscribe(data => {
       this.inputSerach = data;
       localStorage.getItem("lastplayed")?.split(",").forEach((d) => {
-        this.inputSerach.filter((f: any) => {
+        this.inputSerach.filter((f: Game) => {
           if (f.id === d) {
             this.lastPlayed.push(f);
           }
@@ -68,6 +71,16 @@ export class GamesComponent implements OnInit, AfterViewInit {
       })
   }
 
+  // QUERY PARAMS
+  onOptionsSelected() {
+    this.router.navigate(['/games'], {
+      queryParams: {
+        search: this.myInputSerach.nativeElement.value,
+        provider: this.myDropDownSearch.nativeElement.value
+      }
+    });
+  }
+
   // DROPDOWN FILTER BY PROVIDER
   dropdownFilter() {
     const gameProviderName = fromEvent<any>(this.myDropDownSearch.nativeElement, 'change');
@@ -83,12 +96,12 @@ export class GamesComponent implements OnInit, AfterViewInit {
   }
 
   // LAST PLAYED
-  getLastPlayed(item: any) {
-    this.inputSerach.filter((f: any) => {
+  getLastPlayed(item: Game) {
+    this.inputSerach.filter((f: Game) => {
       if (f.id === item.id) {
         this.lastPlayed.push(item);
         this.lastPlayed = [...new Set(this.lastPlayed)].reverse();
-        this.itemId = this.lastPlayed.map((m: any) => m.id).slice(0, 5);
+        this.itemId = this.lastPlayed.map((m: Game) => m.id).slice(0, 5);
         localStorage.setItem("lastplayed", this.itemId.join());
       }
     })

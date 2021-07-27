@@ -1,8 +1,11 @@
 <div class="app-casino__maincontainer">
         <!-- FILTERS -->
         <div class="search-provider">
-                <input type="text" #myInputSerach placeholder="Enter game name">
-                <select #myDropDownSearch>
+                <!-- SEARCH -->
+                <input type="text" #myInputSerach (keypress)="onOptionsSelected()" placeholder="Enter game name">
+
+                <!-- DROPDOWN -->
+                <select #myDropDownSearch (change)="onOptionsSelected()">
                         <option value="allProvider">Show all providers</option>
                         <option [value]="item.providerName" *ngFor="let item of dropDownSearch">
                                 {{item.providerName}}
@@ -32,7 +35,7 @@
 
                 <!-- ALERT MESSAGE -->
                 <div *ngIf="alertMsg">
-                        <h1 class="app-casino__alertMsg">No {{gameNameNotAval}} game available yet ☹</h1>
+                        <h1 class="app-casino__alertMsg">No '{{gameNameNotAval}}' game available yet ☹</h1>
                 </div>
         </div>
 

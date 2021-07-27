@@ -7,6 +7,8 @@ const ROUTES: Routes = [
 	{ path: "", component: GamesComponent },
 	{ path: "home", component: HomeComponent },
 	{ path: "games", component: GamesComponent },
+	{ path: "games/:id", component: GamesComponent },
+	{ path: "**", component: GamesComponent }
 ];
 
 @NgModule({

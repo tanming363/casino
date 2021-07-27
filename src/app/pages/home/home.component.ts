@@ -13,9 +13,9 @@ const NAME_KEBAB = "app-home";
 
 export class HomeComponent implements OnInit {
 	gamesData$!: Observable<Game[]>
-	lastPlayed: any = []
-	inputSerach: any = []
-	itemId: any = [];
+	lastPlayed: Game[] = []
+	inputSerach: Game[] = []
+	itemId: any[] = [];
 	constructor(private gameMockClient: GameMockClient) { }
 
 	ngOnInit() {
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
 		this.gamesData$.subscribe(data => {
 			this.inputSerach = data;
 			localStorage.getItem("lastplayed")?.split(",").forEach((d) => {
-				this.inputSerach.filter((f: any) => {
+				this.inputSerach.filter((f: Game) => {
 					if (f.id === d) {
 						this.lastPlayed.push(f);
 					}
@@ -39,12 +39,12 @@ export class HomeComponent implements OnInit {
 	}
 
 	// LAST PLAYED
-	getLastPlayed(item: any) {
-		this.inputSerach.filter((f: any) => {
+	getLastPlayed(item: Game) {
+		this.inputSerach.filter((f: Game) => {
 			if (f.id === item.id) {
 				this.lastPlayed.push(item);
 				this.lastPlayed = [...new Set(this.lastPlayed)].reverse();
-				this.itemId = this.lastPlayed.map((m: any) => m.id).slice(0, 5);
+				this.itemId = this.lastPlayed.map((m: Game) => m.id).slice(0, 5);
 				localStorage.setItem("lastplayed", this.itemId.join());
 			}
 		})
