@@ -90,7 +90,11 @@ export class GamesComponent implements OnInit, AfterViewInit {
       )
       .subscribe(res => {
         this.gamesData$?.subscribe(data => {
-          this.inputSerach = data.filter(f => f.providerName.toLowerCase() === res.toLowerCase());
+          if (res !== "allProvider") {
+            this.inputSerach = data.filter(f => f.providerName.toLowerCase() === res.toLowerCase());
+          } else {
+            this.inputSerach = data.map(data => data);
+          }
         })
       })
   }
