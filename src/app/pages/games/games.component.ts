@@ -51,6 +51,16 @@ export class GamesComponent implements OnInit, AfterViewInit {
     this.searchFiter();
   }
 
+  // QUERY PARAMS
+  onOptionsSelected() {
+    this.router.navigate(['/games'], {
+      queryParams: {
+        searchTerm: this.myInputSerach.nativeElement.value,
+        provider: this.myDropDownSearch.nativeElement.value
+      }
+    });
+  }
+
   // SEARCH FILTER
   searchFiter() {
     const searchTerm = fromEvent<any>(this.myInputSerach.nativeElement, 'keyup');
