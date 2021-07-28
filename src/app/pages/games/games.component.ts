@@ -27,6 +27,7 @@ export class GamesComponent implements OnInit, AfterViewInit {
     private gameMockClient: GameMockClient,
     private router: Router
   ) { }
+
   ngOnInit() {
     this.gamesData$ = this.gameMockClient.getAll$().pipe(shareReplay());
     this.gamesData$.subscribe(res => {
@@ -62,32 +63,12 @@ export class GamesComponent implements OnInit, AfterViewInit {
       .subscribe(res => {
         if (this.myDropDownSearch.nativeElement.value === "allProvider") {
           this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(res.toLowerCase()));
-          if (this.inputSerach.length === 0) {
-            this.alertMsg = true
-            this.gameNameNotAval = res;
-          } else {
-            this.alertMsg = false
-          }
+          this.alertMsgFun(res);
         } else {
           this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(res.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
-          if (this.inputSerach.length === 0) {
-            this.alertMsg = true
-            this.gameNameNotAval = res;
-          } else {
-            this.alertMsg = false
-          }
+          this.alertMsgFun(res);
         }
       })
-  }
-
-  // QUERY PARAMS
-  onOptionsSelected() {
-    this.router.navigate(['/games'], {
-      queryParams: {
-        searchTerm: this.myInputSerach.nativeElement.value,
-        provider: this.myDropDownSearch.nativeElement.value
-      }
-    });
   }
 
   // DROPDOWN FILTER BY PROVIDER
@@ -114,6 +95,7 @@ export class GamesComponent implements OnInit, AfterViewInit {
       })
   }
 
+
   // LAST PLAYED
   getLastPlayed(item: Game) {
     this.allData.filter((f: Game) => {
@@ -124,5 +106,15 @@ export class GamesComponent implements OnInit, AfterViewInit {
         localStorage.setItem("lastplayed", this.itemId.join());
       }
     })
+  }
+
+  // ALERT MSG FUNCTION
+  alertMsgFun(res: any) {
+    if (this.inputSerach.length === 0) {
+      this.alertMsg = true
+      this.gameNameNotAval = res;
+    } else {
+      this.alertMsg = false
+    }
   }
 }
