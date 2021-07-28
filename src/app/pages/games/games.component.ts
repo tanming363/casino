@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Observable, fromEvent } from "rxjs";
 import { GameMockClient, Game } from "../../shared";
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-games',
@@ -18,28 +17,30 @@ export class GamesComponent implements OnInit, AfterViewInit {
   gameNameNotAval: any;
   lastPlayed: Game[] = []
   itemId: any = [];
+  allData: Game[] = []
 
   @ViewChild("myInputSerach", { static: true }) myInputSerach!: ElementRef;
   @ViewChild("myDropDownSearch", { static: true }) myDropDownSearch!: ElementRef;
+
 
   constructor(
     private gameMockClient: GameMockClient,
     private router: Router
   ) { }
-
   ngOnInit() {
-    this.gamesData$ = this.gameMockClient.getAll$();
-    this.gamesData$.subscribe(data => {
-      this.inputSerach = data;
-      localStorage.getItem("lastplayed")?.split(",").forEach((d) => {
-        this.inputSerach.filter((f: Game) => {
-          if (f.id === d) {
+    this.gamesData$ = this.gameMockClient.getAll$().pipe(shareReplay());
+    this.gamesData$.subscribe(res => {
+      this.allData = res;
+      this.inputSerach = res;
+      localStorage.getItem("lastplayed")?.split(",").forEach((item) => {
+        this.allData.filter((f: Game) => {
+          if (f.id === item) {
             this.lastPlayed.push(f);
           }
         })
       })
-      this.dropDownSearch = Array.from(new Set(data.map(d => d.providerName))).map(pro => {
-        return data.find(d => d.providerName === pro)
+      this.dropDownSearch = Array.from(new Set(res.map(m => m.providerName))).map(pro => {
+        return res.find(d => d.providerName === pro)
       })
     });
   }
@@ -59,25 +60,23 @@ export class GamesComponent implements OnInit, AfterViewInit {
         distinctUntilChanged()
       )
       .subscribe(res => {
-        this.gamesData$?.subscribe(data => {
-          if (this.myDropDownSearch.nativeElement.value === "allProvider") {
-            this.inputSerach = data.filter(f => f.title.toLowerCase().includes(res.toLowerCase()));
-            if (this.inputSerach.length === 0) {
-              this.alertMsg = true
-              this.gameNameNotAval = res;
-            } else {
-              this.alertMsg = false
-            }
+        if (this.myDropDownSearch.nativeElement.value === "allProvider") {
+          this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(res.toLowerCase()));
+          if (this.inputSerach.length === 0) {
+            this.alertMsg = true
+            this.gameNameNotAval = res;
           } else {
-            this.inputSerach = data.filter(f => f.title.toLowerCase().includes(res.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
-            if (this.inputSerach.length === 0) {
-              this.alertMsg = true
-              this.gameNameNotAval = res;
-            } else {
-              this.alertMsg = false
-            }
+            this.alertMsg = false
           }
-        })
+        } else {
+          this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(res.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
+          if (this.inputSerach.length === 0) {
+            this.alertMsg = true
+            this.gameNameNotAval = res;
+          } else {
+            this.alertMsg = false
+          }
+        }
       })
   }
 
@@ -99,27 +98,25 @@ export class GamesComponent implements OnInit, AfterViewInit {
         map(event => event.target.value),
       )
       .subscribe(res => {
-        this.gamesData$?.subscribe(data => {
-          if (this.myInputSerach.nativeElement.value === "") {
-            if (res !== "allProvider") {
-              this.inputSerach = data.filter(f => f.providerName.toLowerCase() === res.toLowerCase());
-            } else {
-              this.inputSerach = data.map(data => data);
-            }
+        if (this.myInputSerach.nativeElement.value === "") {
+          if (res !== "allProvider") {
+            this.inputSerach = this.allData.filter((f: Game) => f.providerName.toLowerCase() === res.toLowerCase());
           } else {
-            if (this.myInputSerach.nativeElement.value !== "allProvider") {
-              this.inputSerach = data.filter(f => f.title.toLowerCase().includes(this.myInputSerach.nativeElement.value.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
-            } else {
-              this.inputSerach = data.map(data => data);
-            }
+            this.inputSerach = this.allData.map((data: Game) => data);
           }
-        })
+        } else {
+          if (res !== "allProvider") {
+            this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(this.myInputSerach.nativeElement.value.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
+          } else {
+            this.inputSerach = this.allData.filter((f: Game) => f.title.toLowerCase().includes(this.myInputSerach.nativeElement.value.toLowerCase()));
+          }
+        }
       })
   }
 
   // LAST PLAYED
   getLastPlayed(item: Game) {
-    this.inputSerach.filter((f: Game) => {
+    this.allData.filter((f: Game) => {
       if (f.id === item.id) {
         this.lastPlayed.push(item);
         this.lastPlayed = [...new Set(this.lastPlayed)].reverse();

@@ -2,7 +2,7 @@
         <!-- FILTERS -->
         <div class="search-provider">
                 <!-- SEARCH -->
-                <input type="text" #myInputSerach (keypress)="onOptionsSelected()" placeholder="Enter game name">
+                <input type="text" #myInputSerach (keyup)="onOptionsSelected()" placeholder="Enter game name">
 
                 <!-- DROPDOWN -->
                 <select #myDropDownSearch (change)="onOptionsSelected()">
