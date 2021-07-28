@@ -16,10 +16,10 @@ Create a mini casino website which contains;
   - Drop down filter by provider
     _ Only one provider at a time can be selected
     _ Include an option to `Show all providers`
-    _ Clicking an already selected provider deselects it
+    _ ***not done**Clicking an already selected provider deselects it
     _ When selecting/deselecting a provider from the list it should be reflected inside the url \* (Advanced) Provider list should be updated depending on the searched results only
   - Search and providers filtering should work in conjunction e.g. `http://localhost:4200/games?searchTerm=book&provider=Kalamba%20Games`
-    - Clearing the search should not clear the game provider filter and vice versa
+    -***not done**Clearing the search should not clear the game provider filter and vice versa
 - Game page
   _ Contains the thumb and a `Play for Fun` button which redirects to the game by using the `startUrl`
   _ Use the `Game.slug` for the `URL` param

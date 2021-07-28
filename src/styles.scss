@@ -63,7 +63,7 @@ body {
 		color: $gold;
 	}
 }
-input[type="text"],
+input,
 select {
 	width: 100%;
 	padding: 12px 20px;
@@ -79,9 +79,9 @@ select {
 		margin: 5px;
 	}
 }
-input[type="text"],
-select:focus {
-	outline: none;
+:focus-visible {
+	outline: 1px solid gold;
+	outline-style: auto;
 }
 .search-provider {
 	display: grid;

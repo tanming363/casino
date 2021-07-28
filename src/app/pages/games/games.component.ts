@@ -60,12 +60,22 @@ export class GamesComponent implements OnInit, AfterViewInit {
       )
       .subscribe(res => {
         this.gamesData$?.subscribe(data => {
-          this.inputSerach = data.filter(f => f.title.toLowerCase().includes(res.toLowerCase()));
-          if (this.inputSerach.length === 0) {
-            this.alertMsg = true
-            this.gameNameNotAval = res;
+          if (this.myDropDownSearch.nativeElement.value === "allProvider") {
+            this.inputSerach = data.filter(f => f.title.toLowerCase().includes(res.toLowerCase()));
+            if (this.inputSerach.length === 0) {
+              this.alertMsg = true
+              this.gameNameNotAval = res;
+            } else {
+              this.alertMsg = false
+            }
           } else {
-            this.alertMsg = false
+            this.inputSerach = data.filter(f => f.title.toLowerCase().includes(res.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
+            if (this.inputSerach.length === 0) {
+              this.alertMsg = true
+              this.gameNameNotAval = res;
+            } else {
+              this.alertMsg = false
+            }
           }
         })
       })
@@ -75,7 +85,7 @@ export class GamesComponent implements OnInit, AfterViewInit {
   onOptionsSelected() {
     this.router.navigate(['/games'], {
       queryParams: {
-        search: this.myInputSerach.nativeElement.value,
+        searchTerm: this.myInputSerach.nativeElement.value,
         provider: this.myDropDownSearch.nativeElement.value
       }
     });
@@ -90,10 +100,18 @@ export class GamesComponent implements OnInit, AfterViewInit {
       )
       .subscribe(res => {
         this.gamesData$?.subscribe(data => {
-          if (res !== "allProvider") {
-            this.inputSerach = data.filter(f => f.providerName.toLowerCase() === res.toLowerCase());
+          if (this.myInputSerach.nativeElement.value === "") {
+            if (res !== "allProvider") {
+              this.inputSerach = data.filter(f => f.providerName.toLowerCase() === res.toLowerCase());
+            } else {
+              this.inputSerach = data.map(data => data);
+            }
           } else {
-            this.inputSerach = data.map(data => data);
+            if (this.myInputSerach.nativeElement.value !== "allProvider") {
+              this.inputSerach = data.filter(f => f.title.toLowerCase().includes(this.myInputSerach.nativeElement.value.toLowerCase()) && f.providerName === this.myDropDownSearch.nativeElement.value);
+            } else {
+              this.inputSerach = data.map(data => data);
+            }
           }
         })
       })

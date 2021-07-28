@@ -6,7 +6,6 @@
 
                 <!-- DROPDOWN -->
                 <select #myDropDownSearch (change)="onOptionsSelected()">
-                        <option value="provider">Providers</option>
                         <option value="allProvider">Show all providers</option>
                         <option [value]="item.providerName" *ngFor="let item of dropDownSearch">
                                 {{item.providerName}}
